@@ -187,7 +187,7 @@ body {
     background-color: rgba(255, 255, 255, .5);
 }
 
-.form-registration-button a, .form-login-button a {
+.form-registration-button a {
     all: initial;
     color: white;
     font-size: 1.2vw;
@@ -196,7 +196,7 @@ body {
     transition: .5s;
 }
 
-.form-registration-button a:hover, .form-login-button a:hover {
+.form-registration-button a:hover {
     cursor: pointer;
     text-shadow: white 0 0 1vw;
     transition: .5s;

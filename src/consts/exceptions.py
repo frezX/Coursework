@@ -30,6 +30,10 @@ class InternalServerError(BaseException):
     text: str = f'{status} - Internal Server Error'
 
 
+class DataError(BadRequest):
+    text: str = f'{BadRequest.text}(Data Error)'
+
+
 AppExceptions: tuple = (
     Skip,
     BadRequest,

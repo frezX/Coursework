@@ -15,7 +15,7 @@ CONFIG: dict = {
         },
         'content_type': 'application/javascript'
     },
-    # 'web/static/css/forms.css': {
+    # 'web/static/css/login.css': {
     #     'data': {
     #         'url': app_env.url
     #     },

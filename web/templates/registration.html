@@ -3,26 +3,37 @@
     <head>
         <meta charset="UTF-8">
         <title>Registration</title>
-        <link rel="stylesheet" href="/css/forms.css">
+        <link rel="stylesheet" href="/css/registration.css">
     </head>
     <body>
         <div class="container">
             <div class="form">
                 <h1 class="form-title">Registration</h1>
-                <form class="form-container" method="post" action="/">
+                <form class="form-container" method="post" action="/api/create_user">
                     <div class="form-inputs">
                         <div class="form-input" id="login">
                             <label for="login">Login</label>
                             <label>
-                                <input class="form-login" name="login" type="text" autocomplete="off"
+                                <input name="login" type="text" autocomplete="off"
                                        placeholder="Input your login" >
                             </label>
                         </div>
                         <div class="form-input" id="password">
                             <label for="password">Password</label>
                             <label>
-                                <input class="form-password" name="password" autocomplete="off"
+                                <input name="password" autocomplete="off"
                                        placeholder="Input your password" type="password">
+                            </label>
+                        </div>
+                        <div class="form-input" id="role">
+                            <label for="role">User role</label>
+                            <label>
+                                <select  class="form-role" name="role">
+                                    <option value="student">Student</option>
+                                    <option value="teacher">Teacher</option>
+                                    <option value="librarian">Librarian</option>
+                                    <option value="author">Author</option>
+                                </select>
                             </label>
                         </div>
                     </div>

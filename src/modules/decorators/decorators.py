@@ -3,8 +3,10 @@ from aiohttp.web import Request
 from json import JSONDecodeError
 from typing import Optional, Any
 from src.schemes import ColorRGB
+from src.consts.db import UserConsts
 from src.modules.colored import colored
 from aiohttp.web_request import BaseRequest
+from src.consts.exceptions import BadRequest, DataError
 from src.consts import colors, log_levels, exceptions, log_const
 
 logger: Logger = Logger()
@@ -64,14 +66,16 @@ def app_logger(level: log_levels = log_levels.INFO, name: Optional[str] = None) 
             try:
                 responce: Any = await func(request=request)
             except exceptions.AppExceptions as e:
-                if type(e) in (exceptions.NotFound, exceptions.MethodNotAllowed):
+                if type(e) == exceptions.DataError:
+                    e.text = e.args[0]
+                if type(e) in (exceptions.NotFound, exceptions.MethodNotAllowed, exceptions.DataError):
                     color: ColorRGB = colors.YELLOW
                     log_level = log_levels.WARNING
                 else:
                     color: ColorRGB = colors.RED
                     log_level = log_levels.ERROR
                 await log(request=request, color=color, log_level=log_level)
-                return exceptions.app_exception_handler(exception=type(e))
+                return exceptions.app_exception_handler(exception=e)
             # except exceptions.ApiExceptions as e:
             #     logger.error(
             #         text=f'{colored(text=f"{name_:{log_const.MAX_NAME_LEN}}", color=colors.YELLOW)} '
@@ -122,5 +126,25 @@ def websocketslogger(func: callable) -> callable:
             return logger.exception(exc=exc)
         await log(text='Close connection!', path=path)
         return responce
+
+    return wrapper
+
+
+def check_params(params: list[str, ...] | tuple[str, ...]) -> callable:
+    def wrapper(func: callable) -> callable:
+        async def inner(*args, data: dict, **kwargs):
+            if not all(param in data for param in params):
+                raise BadRequest
+            login: str = data['login']
+            password: str = data['password']
+            if not login or not password:
+                raise DataError('Empty login and/or password fields')
+            if role := data.get('role'):
+                if role not in UserConsts.roles:
+                    raise DataError('Wrong user role')
+                kwargs['role'] = role
+            return await func(*args, login=login, password=password, **kwargs)
+
+        return inner
 
     return wrapper
