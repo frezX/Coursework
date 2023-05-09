@@ -1,6 +1,6 @@
 from sys import stdout
 from os import mkdir, path
-from typing import Optional
+from typing import Optional, NoReturn
 from src.modules.colored import colored, clear_color
 from traceback import TracebackException, FrameSummary
 from src.modules.formatter import TimeFormatter, Formats
@@ -13,17 +13,17 @@ class Logger:
         self.time_formatter: TimeFormatter = TimeFormatter(time_format=time_format)
 
     @staticmethod
-    def print(text: str) -> None:
+    def print(text: str) -> NoReturn:
         stdout.write(text)
 
     @staticmethod
-    def save_in_log(text: str, level: log_levels) -> None:
+    def save_in_log(text: str, level: log_levels) -> NoReturn:
         if not path.exists(path='log'):
             mkdir(path='log')
         with open(f'log/{level.name.lower()}.log', mode='a') as file:
             file.write(text)
 
-    def log(self, text: str, level: log_levels = log_levels.INFO) -> None:
+    def log(self, text: str, level: log_levels = log_levels.INFO) -> NoReturn:
         time: str = f'[{self.time_formatter.str_time}]'
         colored_time: str = colored(text=time, color=colors.BLUE)
         if self.name:
@@ -38,22 +38,22 @@ class Logger:
         if level in log_levels:
             self.save_in_log(text=clear_color(text=colored_text), level=level)
 
-    def info(self, text: str) -> None:
+    def info(self, text: str) -> NoReturn:
         self.log(text=text)
 
-    def debug(self, text: str) -> None:
+    def debug(self, text: str) -> NoReturn:
         self.log(text=text, level=log_levels.DEBUG)
 
-    def error(self, text: str) -> None:
+    def error(self, text: str) -> NoReturn:
         self.log(text=text, level=log_levels.ERROR)
 
-    def warning(self, text: str) -> None:
+    def warning(self, text: str) -> NoReturn:
         self.log(text=text, level=log_levels.WARNING)
 
-    def critical(self, text: str) -> None:
+    def critical(self, text: str) -> NoReturn:
         self.log(text=text, level=log_levels.CRITICAL)
 
-    def exception(self, exc: BaseException) -> None:
+    def exception(self, exc: BaseException) -> NoReturn:
         tb: FrameSummary = TracebackException.from_exception(exc).stack[-1]
         self.critical(
             text=f'{colored(text="Filename")}: {tb.filename.split("/")[-1]}   '

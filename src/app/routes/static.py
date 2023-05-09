@@ -1,4 +1,5 @@
 from glob import glob
+from typing import NoReturn
 from src.app.static import StaticHandler
 from src.modules.decorators import app_logger
 from src.consts import log_levels, exceptions, static
@@ -7,9 +8,9 @@ from aiohttp.web import Request, Response, FileResponse
 handler: StaticHandler = StaticHandler()
 
 
-def static_handler(prefix: str):
+def static_handler(prefix: str) -> callable:
     @app_logger(level=log_levels.DEBUG, name='StaticHandler')
-    async def wrapper(request: Request) -> Response | FileResponse:
+    async def wrapper(request: Request) -> Response | FileResponse | NoReturn:
         path: str = request.match_info.get("path")
         full_path: str = f'web/static/{prefix}/{path}'
         if full_path in static.CONFIG:

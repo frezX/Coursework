@@ -1,3 +1,4 @@
+from typing import NoReturn
 from src.consts import log_levels
 from aiohttp.web import Request, Response
 from src.app.api.handler import ApiHandler
@@ -8,7 +9,7 @@ handler: ApiHandler = ApiHandler()
 
 
 @app_logger(level=log_levels.DEBUG, name='ApiHandler')
-async def api_handler(request: Request) -> Response:
+async def api_handler(request: Request) -> Response | NoReturn:
     if request.method != 'POST':
         raise MethodNotAllowed
     path: str = request.match_info.get('path')

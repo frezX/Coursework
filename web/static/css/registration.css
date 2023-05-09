@@ -13,9 +13,9 @@ body, html {
 }
 
 body {
-    background-image: url('/img/background.jpg');
-    background-repeat: no-repeat;
     background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url('/img/background.jpg');
 }
 
 .container {
@@ -106,16 +106,16 @@ body {
 }
 
 #login::before {
-    background-image: url('/svg/user.svg');
+    background-image: url('/svg/forms/user.svg');
 }
 
 #password::before {
-    background-image: url('/svg/lock.svg');
+    background-image: url('/svg/forms/lock.svg');
 }
 
 #role::before {
     top: 4.4vw;
-    background-image: url('/svg/settings.svg');
+    background-image: url('/svg/forms/settings.svg');
 }
 
 .form-input label {

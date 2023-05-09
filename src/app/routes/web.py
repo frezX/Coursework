@@ -1,3 +1,4 @@
+from typing import NoReturn
 from json import JSONDecodeError
 from src.consts import log_levels
 from aiohttp.web import Request, Response
@@ -9,7 +10,7 @@ handler: WebHandler = WebHandler()
 
 
 @app_logger(level=log_levels.DEBUG, name='WebHandler')
-async def web_handler(request: Request) -> Response:
+async def web_handler(request: Request) -> Response | NoReturn:
     path: str = request.match_info.get('path')
     data: dict = {}
     match request.method:

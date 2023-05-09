@@ -13,9 +13,9 @@ body, html {
 }
 
 body {
-    background-image: url('/img/background.jpg');
-    background-repeat: no-repeat;
     background-size: cover;
+    background-repeat: no-repeat;
+    background-image: url('/img/background.jpg');
 }
 
 .container {
@@ -42,7 +42,7 @@ body {
 .form:hover, .form:focus-within {
     backdrop-filter: blur(1vw);
     -webkit-backdrop-filter: blur(1vw);
-    box-shadow: black 0 0 1vw;;
+    box-shadow: black 0 0 1vw;
     transition: .5s;
 }
 
@@ -145,17 +145,17 @@ body {
     left: 0;
 }
 
-.form-input:hover::before, .form-input:focus-within::before  {
+.form-input:hover::before, .form-input:focus-within::before {
     transition: .5s;
     filter: drop-shadow(0 0 .5vw white);
 }
 
 #login::before {
-    background-image: url('/svg/user.svg');
+    background-image: url('/svg/forms/user.svg');
 }
 
 #password::before {
-    background-image: url('/svg/lock.svg');
+    background-image: url('/svg/forms/lock.svg');
 }
 
 .form-button {

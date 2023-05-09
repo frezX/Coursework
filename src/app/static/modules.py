@@ -1,22 +1,27 @@
-from typing import Optional
+from aiofiles import open
 from jinja2 import Template
-from src.consts import static
 from aiohttp.web import Request
+from src.consts.static import CONFIG, ValueFromCookies, ValueFromHeaders
 
 
 class Modules:
     def __init__(self):
-        self.config: dict = static.CONFIG
+        self.config: dict = CONFIG
 
     @staticmethod
     async def get_template(path: str) -> Template:
-        with open(file=path) as source:
-            return Template(source=source.read())
+        async with open(file=path) as template:
+            return Template(source=await template.read())
 
-    async def get_data(self, request: Request, path: str) -> Optional[dict]:
-        data: dict = self.config[path]['data']
-        if data.get('token'):
-            data['token']: str = request.headers.get('Referer').split('/')[-1]
+    async def get_data(self, request: Request, path: str) -> dict:
+        data: dict = {}
+        for param, value in self.config[path]['data'].items():
+            if value is ValueFromCookies:
+                data[param] = request.cookies.get(param, value)
+            elif value is ValueFromHeaders:
+                data[param] = request.headers.get(param, value)
+            else:
+                data[param] = value
         return data
 
     async def get_content_type(self, request: Request, path: str) -> str:

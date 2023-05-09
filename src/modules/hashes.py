@@ -9,7 +9,7 @@ class HASH:
     def __str__(self) -> str:
         return self.value
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'HASH-{self.hash_name}({self.value})'
 
     def __eq__(self, other) -> bool:

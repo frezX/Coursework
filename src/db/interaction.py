@@ -1,6 +1,6 @@
 from time import time
 from src.db import DB, database
-from typing import Optional
+from typing import Optional, NoReturn
 from pymongo.collection import Collection
 from src.modules.hashes import HASH, sha512
 from src.consts.exceptions import DataError
@@ -18,7 +18,7 @@ class UserInteraction:
         return session.value
 
     async def is_unique_login(self, login: str) -> bool:
-        return not bool(self.users.find_one({'login': login}))
+        return not bool(self.users.find_one(filter={'login': login}))
 
     async def create_user(self, login: str, password_hash: HASH, role: str) -> tuple[int, str]:
         count: int = self.users.count_documents({})
@@ -38,11 +38,11 @@ class UserInteraction:
         self.sessions.insert_one(document=session_data)
         return user_id, session
 
-    async def login(self, login: str, password_hash: HASH) -> tuple[int, str, str]:
-        user: Optional[dict] = self.users.find_one({'login': login, 'password_hash': password_hash.value})
+    async def login(self, login: str, password_hash: HASH) -> tuple[int, str, str] | NoReturn:
+        user: Optional[dict] = self.users.find_one(filter={'login': login, 'password_hash': password_hash.value})
         if not user:
             raise DataError('Wrong login or password')
         user_id: int = user['_id']
         role: str = user['role']
-        session: str = self.sessions.find_one({'_id': user_id})['session']
+        session: str = self.sessions.find_one(filter={'_id': user_id})['session']
         return user_id, role, session

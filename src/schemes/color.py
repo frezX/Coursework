@@ -10,6 +10,6 @@ class ColorRGB(BaseModel):
     def tuple(self) -> tuple:
         return self.r, self.g, self.b
 
-    def __iter__(self):
+    def __iter__(self) -> int:
         for color_channel in self.tuple:
             yield color_channel

@@ -1,10 +1,10 @@
 from src.logger import Logger
 from aiohttp.web import Request
 from json import JSONDecodeError
-from typing import Optional, Any
 from src.schemes import ColorRGB
 from src.consts.db import UserConsts
 from src.modules.colored import colored
+from typing import Optional, Any, NoReturn
 from aiohttp.web_request import BaseRequest
 from src.consts.exceptions import BadRequest, DataError
 from src.consts import colors, log_levels, exceptions, log_const
@@ -55,7 +55,7 @@ def app_logger(level: log_levels = log_levels.INFO, name: Optional[str] = None) 
 
         async def log(
                 request: BaseRequest, color: ColorRGB = colors.GREEN, log_level: log_levels = log_levels.INFO
-        ) -> None:
+        ) -> NoReturn:
             logger.log(
                 text=f'{colored(text=f"{name_:{log_const.MAX_NAME_LEN}}", color=color)} '
                      f'{await get_based_text(request=request)}',
@@ -108,10 +108,10 @@ def websocketslogger(func: callable) -> callable:
     name: str = '<WS_Handler>'
     colored_name: str = colored(text=f'{name:{log_const.MAX_NAME_LEN}}', color=colors.ORANGE)
 
-    async def log(text: str, path: str) -> None:
+    async def log(text: str, path: str) -> NoReturn:
         logger.info(text=f'{colored_name} {text:40}|  {colored(text="Path", color=colors.PURPLE)}: /{path}')
 
-    async def new_connection(path: str) -> None:
+    async def new_connection(path: str) -> NoReturn:
         await log(text='New connection!', path=path)
 
     async def wrapper(request: Request) -> Any:
@@ -132,7 +132,7 @@ def websocketslogger(func: callable) -> callable:
 
 def check_params(params: list[str, ...] | tuple[str, ...]) -> callable:
     def wrapper(func: callable) -> callable:
-        async def inner(*args, data: dict, **kwargs):
+        async def inner(*args, data: dict, **kwargs) -> Any | NoReturn:
             if not all(param in data for param in params):
                 raise BadRequest
             login: str = data['login']

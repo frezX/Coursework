@@ -3,13 +3,30 @@
     <head>
         <meta charset="UTF-8">
         <title>Main Page</title>
+        <link rel="stylesheet" href="/css/index.css">
     </head>
     <body>
-        <div>
-            user_id: {{ user_id }}
-            role: {{ role }}
-            login: {{ login }}
-            session: {{ session }}
+        <div class="container">
+            <div class="block user">
+                <h1 class="title">User Info</h1>
+                <div class="user-info">
+                    <div class="user-avatar"></div>
+                    <div class="user-field">
+                        <div class="field" id="id">User ID: {{ user_id }}</div>
+                        <div class="field" id="login">Login: {{ login }}</div>
+                        <div class="field" id="role">Role: {{ role }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="block main">
+
+            </div>
+            <div class="block menu">
+                <h1 class="title">Menu</h1>
+                <div class="menu-buttons">
+                    <a href="/logout" class="menu-link" id="logout-link">Logout</a>
+                </div>
+            </div>
         </div>
     </body>
 </html>

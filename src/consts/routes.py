@@ -2,6 +2,7 @@ class WebRoutes:
     INDEX: str = ''
     LOGIN: str = 'login'
     REGISTRATION: str = 'registration'
+    LOGOUT: str = 'logout'
 
 
 class ApiRoutes:

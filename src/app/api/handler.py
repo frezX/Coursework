@@ -1,3 +1,4 @@
+from typing import NoReturn
 from src.db import DB, database
 from src.modules.web import set_cookies
 from src.consts.routes import ApiRoutes
@@ -28,7 +29,7 @@ class ApiHandler:
         return redirect
 
     @check_params(params=['login', 'password', 'role'])
-    async def create_user(self, login: str, password: str, role: str) -> Response:
+    async def create_user(self, login: str, password: str, role: str) -> Response | NoReturn:
         if not await self.user_interaction.is_unique_login(login=login):
             raise DataError('This login already exists')
         password_hash: HASH = await sha256(string=password)
@@ -41,10 +42,9 @@ class ApiHandler:
         }
         redirect: HTTPFound = HTTPFound(location='/')
         await set_cookies(redirect=redirect, cookies=cookies)
-        print(redirect.cookies)
         return redirect
 
-    async def handler(self, request: Request, path: str, data: dict) -> Response:
+    async def handler(self, request: Request, path: str, data: dict) -> Response | NoReturn:
         match path:
             case ApiRoutes.LOGIN:
                 return await self.login(data=data)
