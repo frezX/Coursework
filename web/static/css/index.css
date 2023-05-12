@@ -121,6 +121,7 @@ body {
     all: initial;
     color: white;
     font-size: 2vw;
+    margin-bottom: 1vw;
     position: relative;
     transition: .5s;
 }
@@ -151,5 +152,9 @@ body {
 
 #logout-link::before {
     background-image: url('/svg/index/logout.svg');
+}
+
+#add-book-link::before {
+    background-image: url('/svg/index/add-book.svg');
 }
 

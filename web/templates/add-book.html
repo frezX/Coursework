@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Add book</title>
+        <link rel="stylesheet" href="/css/add-book.css">
+    </head>
+    <body>
+        <div class="container">
+            <div class="form">
+                <h1 class="form-title">Add Book</h1>
+                <form class="form-container" method="post" action="/api/add_book">
+                    <div class="form-inputs">
+                        <div class="form-input" id="name">
+                            <label for="name">Name</label>
+                            <label>
+                                <input name="name" type="text" autocomplete="off" placeholder="Input book`s name">
+                            </label>
+                        </div>
+                        <div class="form-input" id="author">
+                            <label for="author">Author</label>
+                            <label>
+                                <input name="author" type="text" autocomplete="off" placeholder="Input author`s name">
+                            </label>
+                        </div>
+                        <div class="form-input" id="category">
+                            <label for="category">Category</label>
+                            <label>
+                                <select  class="form-category" name="category">
+                                    {% for category in consts['categories'] %}
+                                    <option value="{{ category.lower().replace(' ', '_') }}">{{ category }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-button">
+                        <input class="form-submit" value="Add book" type="submit">
+                    </div>
+                    <div class="form-main-page-button">
+                        <a href="/">Main page</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

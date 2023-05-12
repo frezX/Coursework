@@ -3,6 +3,7 @@ class WebRoutes:
     LOGIN: str = 'login'
     REGISTRATION: str = 'registration'
     LOGOUT: str = 'logout'
+    ADD_BOOK: str = 'add_book'
 
 
 class ApiRoutes:

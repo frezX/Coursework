@@ -21,7 +21,7 @@ class HASH:
 
 async def sha256(string: str) -> HASH:
     return HASH(
-        hash_name='sha-256',
+        hash_name='sha256',
         value=hashlib.sha3_256(string.encode()).hexdigest()
     )
 

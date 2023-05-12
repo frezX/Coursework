@@ -3,6 +3,5 @@ class UserConsts:
         'student': 'Student',
         'librarian': 'Librarian',
         'teacher': 'Teacher',
-        'author': 'Author',
-        # 'admin': 'Admin',
+        'admin': 'Admin',
     }

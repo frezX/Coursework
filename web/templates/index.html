@@ -15,16 +15,20 @@
                         <div class="field" id="id">User ID: {{ user_id }}</div>
                         <div class="field" id="login">Login: {{ login }}</div>
                         <div class="field" id="role">Role: {{ role }}</div>
+                        <div class="field" id="registration_date">Registration date:<br>{{ registration_date }}</div>
                     </div>
                 </div>
             </div>
             <div class="block main">
-
+                <h1 class="title">Catalog</h1>
             </div>
             <div class="block menu">
                 <h1 class="title">Menu</h1>
                 <div class="menu-buttons">
                     <a href="/logout" class="menu-link" id="logout-link">Logout</a>
+                    {% if role in consts['roles_allowed_add_books'] %}
+                    <a href="/add_book" class="menu-link" id="add-book-link">Add book</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

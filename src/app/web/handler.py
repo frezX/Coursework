@@ -1,5 +1,6 @@
+from typing import NoReturn
 from src.consts import templates
-from typing import Optional, NoReturn
+from src.consts.web import WebConsts
 from src.consts.routes import WebRoutes
 from src.consts.exceptions import NotFound
 from src.db.interaction import UserInteraction
@@ -9,25 +10,22 @@ from src.modules.web import render_template, del_cookies, validate_cookies
 
 class WebHandler:
     def __init__(self):
-        self.needed_cookies: tuple[str, ...] = ('id', 'role', 'login', 'session')
         self.user_interaction: UserInteraction = UserInteraction()
 
     async def index(self, request: Request) -> tuple[str, dict] | NoReturn:
         cookies: dict = dict(request.cookies)
-        if not cookies or not await validate_cookies(cookies=cookies, needed_cookies=self.needed_cookies):
-            raise HTTPFound(location=f'/{WebRoutes.LOGIN}')
-        user_id: int = int(cookies['id'])
-        role: str = cookies['role']
-        login: str = cookies['login']
-        session: str = cookies['session']
-        session_in_db: Optional[dict] = self.user_interaction.sessions.find_one(filter={'_id': user_id})
-        if session_in_db and session_in_db.get('session') != session:
+        if not cookies or not await validate_cookies(cookies=cookies, needed_cookies=WebConsts.NEEDED_COOKIES)\
+                or not await self.user_interaction.verify_user_with_cookies(cookies=cookies):
             raise HTTPFound(location=f'/{WebRoutes.LOGIN}')
         params: dict = {
-            'user_id': user_id,
-            'role': role,
-            'login': login,
-            'session': session
+            'user_id': cookies['id'],
+            'role': cookies['role'],
+            'login': cookies['login'],
+            'session': cookies['session'],
+            'registration_date': cookies['registration_date'],
+            'consts': {
+                'roles_allowed_add_books': 'librarian, admin, teacher'
+            }
         }
         return templates['index'], params
 
@@ -38,10 +36,27 @@ class WebHandler:
         }
         return templates[path], params
 
-    async def logout(self) -> NoReturn:
+    @staticmethod
+    async def logout() -> NoReturn:
         redirect: HTTPFound = HTTPFound(location=f'/{WebRoutes.LOGIN}')
-        await del_cookies(redirect=redirect, cookies=self.needed_cookies)
+        await del_cookies(redirect=redirect, cookies=WebConsts.NEEDED_COOKIES)
         raise redirect
+
+    async def add_book(self, request: Request) -> tuple[str, dict] | NoReturn:
+        cookies: dict = dict(request.cookies)
+        if not cookies or not await validate_cookies(cookies=cookies, needed_cookies=WebConsts.NEEDED_COOKIES)\
+                or not await self.user_interaction.verify_user_with_cookies(cookies=cookies):
+            raise HTTPFound(location=f'/{WebRoutes.LOGIN}')
+        if role := cookies['role'] not in WebConsts.ROLES_ALLOWED_ADD_BOOKS:
+            raise HTTPFound(location=f'/{WebRoutes.INDEX}')
+        params: dict = {
+            'user_id': cookies['id'],
+            'role': role,
+            'consts': {
+                'categories': WebConsts.BOOK_CONSTS.CATEGORIES
+            }
+        }
+        return templates[WebRoutes.ADD_BOOK], params
 
     async def handler(self, request: Request, path: str, data: dict) -> tuple[str, dict] | NoReturn:
         match path:
@@ -49,6 +64,8 @@ class WebHandler:
                 return await self.index(request=request)
             case WebRoutes.LOGIN | WebRoutes.REGISTRATION:
                 return await self.default_route_handler(path=path, data=data)
+            case WebRoutes.ADD_BOOK:
+                return await self.add_book(request=request)
             case WebRoutes.LOGOUT:
                 await self.logout()
             case _:

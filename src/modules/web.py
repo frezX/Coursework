@@ -18,5 +18,4 @@ async def del_cookies(redirect: HTTPFound, cookies: tuple) -> NoReturn:
 
 
 async def validate_cookies(cookies: dict, needed_cookies: tuple[str, ...]) -> bool:
-    return all(cookie in needed_cookies for cookie in cookies)
-
+    return all(needed_cookie in cookies for needed_cookie in needed_cookies)
