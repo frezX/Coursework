@@ -20,7 +20,7 @@ class Main:
             loop=event_loop,
             host=app_env.host,
             port=app_env.port,
-            print=lambda *args, **kwargs: ...
+            print=lambda *args, **kwargs: logger.info(f'Application running on {app_env.url}')
         )
 
     def run(self) -> NoReturn:
@@ -37,3 +37,4 @@ if __name__ == '__main__':
         logger.exception(exc=exc)
     finally:
         system("stty echo")
+

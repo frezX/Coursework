@@ -75,15 +75,14 @@ body {
 
 .form-inputs {
     width: 100%;
-    height: 75%;
-    margin-top: -7vw;
+    margin-top: -3vw;
 }
 
 .form-input {
     display: flex;
     align-items: center;
     flex-direction: column;
-    margin: 1vw;
+    /*margin: 1vw;*/
     position: relative;
 }
 
@@ -97,7 +96,7 @@ body {
     background-position: center center;
     transition: .5s;
     top: 4vw;
-    left: 0;
+    left: 1vw;
 }
 
 .form-input:hover::before, .form-input:focus-within::before  {
@@ -116,6 +115,11 @@ body {
 #category::before {
     top: 4.4vw;
     background-image: url('/svg/forms/settings.svg');
+}
+
+#image::before {
+    top: 4.4vw;
+    background-image: url('/svg/add-book/image.svg');
 }
 
 .form-input label {
@@ -162,6 +166,11 @@ body {
     background-color: rgba(0, 0, 0, .3);
 }
 
+.form-input input::file-selector-button {
+    display: none;
+    cursor: pointer;
+}
+
 .form-input select option {
     color: black;
 }
@@ -172,7 +181,7 @@ body {
 }
 
 .form-button {
-    margin-bottom: 1.5vw;
+    margin-bottom: 0.5vw;
 }
 
 .form-button input {

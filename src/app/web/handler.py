@@ -3,14 +3,15 @@ from src.consts import templates
 from src.consts.web import WebConsts
 from src.consts.routes import WebRoutes
 from src.consts.exceptions import NotFound
-from src.db.interaction import UserInteraction
 from aiohttp.web import Response, Request, HTTPFound
+from src.db.interaction import UserInteraction, BookInteraction
 from src.modules.web import render_template, del_cookies, validate_cookies
 
 
 class WebHandler:
     def __init__(self):
         self.user_interaction: UserInteraction = UserInteraction()
+        self.book_interaction: BookInteraction = BookInteraction()
 
     async def index(self, request: Request) -> tuple[str, dict] | NoReturn:
         cookies: dict = dict(request.cookies)
@@ -25,6 +26,9 @@ class WebHandler:
             'registration_date': cookies['registration_date'],
             'consts': {
                 'roles_allowed_add_books': 'librarian, admin, teacher'
+            },
+            'data': {
+                'catalog': await self.book_interaction.get_catalog()
             }
         }
         return templates['index'], params
@@ -54,7 +58,10 @@ class WebHandler:
             'role': role,
             'consts': {
                 'categories': WebConsts.BOOK_CONSTS.CATEGORIES
-            }
+            },
+            'functions': [
+                enumerate
+            ]
         }
         return templates[WebRoutes.ADD_BOOK], params
 

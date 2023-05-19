@@ -1,10 +1,17 @@
 @import "fonts.css";
 
+::-webkit-scrollbar {
+    width: 0;
+}
+
 * {
     margin: 0;
     padding: 0;
     cursor: default;
     box-sizing: border-box;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 body, html {
@@ -53,6 +60,12 @@ body {
 
 .main {
     width: 60vw;
+    min-height: calc(100vh - 1vw);
+    display: block;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
 }
 
 .user {
@@ -106,6 +119,74 @@ body {
 }
 
 .user:hover .field {
+    text-shadow: 0 0 .5vw white;
+    transition: .5s;
+}
+
+.scroll {
+    height: calc(100% - 6vw);
+    overflow-y: auto;
+}
+
+.catalog {
+    width: 100%;
+    min-height: calc(100% - 6vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.book-catalog {
+    width: 100%;
+    min-height: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.book {
+    width: 11vw;
+    height: 18.5vw;
+    border: .2vw white solid;
+    border-radius: 1vw;
+    background: rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    transition: .5s;
+    margin: calc((100% - (18.5vw * 3)) / 2) 0;
+}
+
+.book:hover {
+    cursor: pointer;
+    box-shadow: white 0 0 1vw;
+    transition: .5s;
+}
+
+.book:hover * {
+    cursor: pointer;
+}
+
+.book-image {
+    margin-top: 1vw;
+    height: 12.5vw;
+    border-radius: .7vw;
+}
+
+.book h2 {
+    margin-top: 1vw;
+    font-size: 1.2vw;
+    transition: .5s;
+}
+
+.book h3 {
+    margin-top: .5vw;
+    font-size: 1vw;
+    transition: .5s;
+}
+
+.book:hover h2, .book:hover h3 {
     text-shadow: 0 0 .5vw white;
     transition: .5s;
 }

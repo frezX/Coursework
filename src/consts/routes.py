@@ -9,3 +9,4 @@ class WebRoutes:
 class ApiRoutes:
     LOGIN: str = 'login'
     CREATE_USER: str = 'create_user'
+    ADD_BOOK: str = 'add_book'
