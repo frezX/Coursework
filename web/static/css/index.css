@@ -138,7 +138,6 @@ body {
 
 .book-catalog {
     width: 100%;
-    min-height: 90%;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-evenly;
@@ -155,7 +154,7 @@ body {
     flex-direction: column;
     overflow: hidden;
     transition: .5s;
-    margin: calc((100% - (18.5vw * 3)) / 2) 0;
+    margin: 2vw 0;
 }
 
 .book:hover {
