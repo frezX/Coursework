@@ -3,7 +3,8 @@ from aiohttp.web import route
 from src.app.routes.ws import ws_handler
 from src.app.routes.api import api_handler
 from src.app.routes.web import web_handler
-from src.app.routes.static import static_handler
+from src.app.routes.static import static_handler, favicon_handler
+
 
 config_routes: dict = {
     'css': dict(
@@ -45,6 +46,11 @@ config_routes: dict = {
         path='/api/{path:.*}',
         method='*',
         handler=api_handler
+    ),
+    'favicon.ico': dict(
+        path='/favicon.ico',
+        method='*',
+        handler=favicon_handler
     ),
     'web': dict(
         path='/{path:.*}',

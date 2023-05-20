@@ -29,7 +29,7 @@ class WebHandler:
                 'roles_allowed_add_books': 'librarian, admin, teacher'
             },
             'data': {
-                'catalog': await self.book_interaction.get_catalog()
+                'catalog': [*await self.book_interaction.get_catalog() * 2]
             }
         }
         return templates['index'], params
@@ -107,6 +107,7 @@ class WebHandler:
                 raise NotFound
 
     async def __call__(self, request: Request, path: str, data: dict) -> Response:
+        # print(request.headers)
         try:
             template, params = await self.handler(request=request, path=path, data=data)
             return await render_template(request=request, template=template, params=params)

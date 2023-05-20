@@ -20,3 +20,8 @@ def static_handler(prefix: str) -> callable:
         raise exceptions.NotFound
 
     return wrapper
+
+
+@app_logger(level=log_levels.DEBUG, name='FaviconHandler')
+async def favicon_handler() -> FileResponse:
+    return FileResponse(path='web/static/ico/favicon.ico')

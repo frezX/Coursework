@@ -1,10 +1,10 @@
 from typing import NoReturn
 from json import JSONDecodeError
 from src.consts import log_levels
-from aiohttp.web import Request, Response
 from src.app.web.handler import WebHandler
 from src.consts.exceptions import NotFound
 from src.modules.decorators import app_logger
+from aiohttp.web import Request, Response, FileResponse
 
 handler: WebHandler = WebHandler()
 

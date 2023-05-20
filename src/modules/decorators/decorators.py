@@ -64,7 +64,7 @@ def app_logger(level: log_levels = log_levels.INFO, name: Optional[str] = None) 
 
         async def inner(request: BaseRequest) -> Any:
             try:
-                responce: Any = await func(request=request)
+                responce: Any = await func() if name_ == '<FaviconHandler>' else await func(request=request)
             except exceptions.AppExceptions as e:
                 if type(e) == exceptions.DataError:
                     e.text = e.args[0]

@@ -211,8 +211,8 @@ body {
 }
 
 .menu-link:hover::before {
-    transition: .5s;
     filter: drop-shadow(0 0 .5vw white);
+    transition: .5s;
 }
 
 #main-page-link::before {
@@ -223,7 +223,29 @@ body {
     background-image: url('/svg/index/logout.svg');
 }
 
-#add-book-link::before {
+#add-book::before {
     background-image: url('/svg/index/add-book.svg');
 }
 
+#take-book::before {
+    background-image: url('/svg/book/take-book.svg');
+}
+
+#statistics-book::before {
+    background-image: url('/svg/book/statistics-book.svg');
+}
+
+#return-book::before {
+    background-image: url('/svg/book/return-book.svg');
+}
+
+.book-buttons-label {
+    margin: 2vw 0 1vw 0;
+    font-size: 1.5vw;
+    transition: .5s;
+}
+
+.book-buttons-label:hover {
+    filter: drop-shadow(0 0 .5vw white);
+    transition: .5s;
+}

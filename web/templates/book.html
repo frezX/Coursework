@@ -37,9 +37,16 @@
                 <div class="menu-buttons">
                     <a href="/" class="menu-link" id="main-page-link">Main Page</a>
                     <a href="/logout" class="menu-link" id="logout-link">Logout</a>
+                    <p class="book-buttons-label">Book Interaction</p>
                     {% if role in consts['roles_allowed_add_books'] %}
                     <a href="/add_book" class="menu-link" id="add-book-link">Add book</a>
                     {% endif %}
+                    <a onclick="window.location.href='/api/take-book?id={{ book.book_id }}'" class="menu-link"
+                       id="take-book">Take a book</a>
+                    <a onclick="window.location.href='/api/return-book?id={{ book.book_id }}'" class="menu-link"
+                       id="return-book">Return book</a>
+                    <a onclick="window.location.href='/api/statistics-book?id={{ book.book_id }}'" class="menu-link"
+                       id="statistics-book">Statistics</a>
                 </div>
             </div>
         </div>
