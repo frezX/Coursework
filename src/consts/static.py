@@ -12,5 +12,11 @@ CONFIG: dict = {
             'role': ValueFromCookies
         },
         'content_type': 'text/css'
+    },
+    'web/static/css/book.css': {
+        'data': {
+            'role': ValueFromCookies
+        },
+        'content_type': 'text/css'
     }
 }

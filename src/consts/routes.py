@@ -4,6 +4,7 @@ class WebRoutes:
     REGISTRATION: str = 'registration'
     LOGOUT: str = 'logout'
     ADD_BOOK: str = 'add_book'
+    BOOK: str = 'book'
 
 
 class ApiRoutes:

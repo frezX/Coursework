@@ -2,8 +2,8 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Main Page</title>
-        <link rel="stylesheet" href="/css/index.css">
+        <title>{{ book.author }}. {{ book.name }}</title>
+        <link rel="stylesheet" href="/css/book.css">
     </head>
     <body>
         <div class="container">
@@ -20,25 +20,22 @@
                 </div>
             </div>
             <div class="block main">
-                <h1 class="title">Catalog</h1>
-                <div class="scroll">
-                    <div class="catalog">
-                        <div class="book-catalog">
-                            {% for book in data['catalog'] %}
-                            <div class="book" title="{{ book.author }}. {{ book.name }}"
-                                 onclick="window.location.href = '/book?id={{ book.book_id }}'">
-                                <img class="book-image" src="data:image/png;base64,{{ book.image }}" alt="Image">
-                                <h2 title="{{ book.author }}">{{ book.strip_author_name }}</h2>
-                                <h3 title="{{ book.category }}">{{ book.strip_category_name }}</h3>
-                            </div>
-                            {% endfor %}
-                        </div>
+                <h1 class="title">Book</h1>
+                <div class="book">
+                    <div class="book-image">
+                        <img class="image" src="data:image/png;base64,{{ book.image }}" alt="Image">
+                    </div>
+                    <div class="bool-info">
+                        <h1>{{ book.name }}</h1>
+                        <h2>{{ book.author }}</h2>
+                        <h3>{{ book.category }}</h3>
                     </div>
                 </div>
             </div>
             <div class="block menu">
                 <h1 class="title">Menu</h1>
                 <div class="menu-buttons">
+                    <a href="/" class="menu-link" id="main-page-link">Main Page</a>
                     <a href="/logout" class="menu-link" id="logout-link">Logout</a>
                     {% if role in consts['roles_allowed_add_books'] %}
                     <a href="/add_book" class="menu-link" id="add-book-link">Add book</a>

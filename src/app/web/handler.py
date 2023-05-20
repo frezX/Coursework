@@ -1,9 +1,10 @@
 from typing import NoReturn
 from src.consts import templates
+from src.consts.book import Book
 from src.consts.web import WebConsts
 from src.consts.routes import WebRoutes
-from src.consts.exceptions import NotFound
 from aiohttp.web import Response, Request, HTTPFound
+from src.consts.exceptions import NotFound, BadRequest
 from src.db.interaction import UserInteraction, BookInteraction
 from src.modules.web import render_template, del_cookies, validate_cookies
 
@@ -65,6 +66,31 @@ class WebHandler:
         }
         return templates[WebRoutes.ADD_BOOK], params
 
+    async def book(self, request: Request, data: dict) -> tuple[str, dict] | NoReturn:
+        cookies: dict = dict(request.cookies)
+        if not cookies or not await validate_cookies(cookies=cookies, needed_cookies=WebConsts.NEEDED_COOKIES)\
+                or not await self.user_interaction.verify_user_with_cookies(cookies=cookies):
+            raise HTTPFound(location=f'/{WebRoutes.LOGIN}')
+        try:
+            if not (book_id := int(data.get('params', {}).get('id', 0))) or \
+                    not (book := await self.book_interaction.get_book(book_id=book_id)):
+                raise NotFound
+        except ValueError:
+            raise BadRequest
+        params: dict = {
+            'user_id': cookies['id'],
+            'role': cookies['role'],
+            'login': cookies['login'],
+            'session': cookies['session'],
+            'registration_date': cookies['registration_date'],
+            'book_id': book_id,
+            'book': book,
+            'consts': {
+                'roles_allowed_add_books': 'librarian, admin, teacher'
+            },
+        }
+        return templates[WebRoutes.BOOK], params
+
     async def handler(self, request: Request, path: str, data: dict) -> tuple[str, dict] | NoReturn:
         match path:
             case WebRoutes.INDEX:
@@ -73,6 +99,8 @@ class WebHandler:
                 return await self.default_route_handler(path=path, data=data)
             case WebRoutes.ADD_BOOK:
                 return await self.add_book(request=request)
+            case WebRoutes.BOOK:
+                return await self.book(request=request, data=data)
             case WebRoutes.LOGOUT:
                 await self.logout()
             case _:

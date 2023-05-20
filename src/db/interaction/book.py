@@ -1,4 +1,5 @@
 from bson import Binary
+from typing import Optional
 from src.db import DB, database
 from src.consts.book import Book
 from pymongo.collection import Collection
@@ -37,3 +38,16 @@ class BookInteraction:
             )
             for book in self.books.find()
         ]
+
+    async def get_book(self, book_id: int) -> Optional[Book]:
+        if not (book_data := self.books.find_one({'_id': book_id})):
+            return
+        book: Book = Book(
+            book_id=book_id,
+            name=book_data['name'],
+            author=book_data['author'],
+            category=book_data['category'],
+            image=book_data['image'],
+            date=strftime(timestamp=book_data['timestamp'])
+        )
+        return book
