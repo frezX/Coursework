@@ -20,7 +20,7 @@ class ApiHandler:
         self.book_interaction: BookInteraction = BookInteraction()
 
     @check_params(params=['login', 'password'])
-    async def login(self, login: str, password: str) -> Response:
+    async def login(self, login: str, password: str) -> HTTPFound:
         password_hash: HASH = await sha256(string=password)
         user_id, role, session, timestamp = await self.user_interaction.login(
             login=login,
@@ -38,7 +38,7 @@ class ApiHandler:
         return redirect
 
     @check_params(params=['login', 'password', 'role'])
-    async def create_user(self, login: str, password: str, role: str) -> Response | NoReturn:
+    async def create_user(self, login: str, password: str, role: str) -> HTTPFound | NoReturn:
         if not await self.user_interaction.is_unique_login(login=login):
             raise DataError('This login already exists')
         password_hash: HASH = await sha256(string=password)
@@ -77,6 +77,17 @@ class ApiHandler:
             self.logger.exception(exc=exc)
             return Response(text=str(data))
 
+    async def take_return_book(self, request: Request, data: dict, status: str) -> HTTPFound | NoReturn:
+        if not (book_id := int(data.get('id', 0))):
+            raise DataError('Wrong API params')
+        user_id: int = int(request.cookies.get('id'))
+        await self.book_interaction.take_return_book(user_id=user_id, book_id=book_id, status=status)
+        return HTTPFound(location=f'/book?id={book_id}')
+
+    @staticmethod
+    async def statistics_book(data: dict) -> Response | NoReturn:
+        return Response(text=str(data))
+
     async def handler(self, request: Request, path: str, data: dict) -> Response | NoReturn:
         match path:
             case ApiRoutes.LOGIN:
@@ -85,6 +96,12 @@ class ApiHandler:
                 return await self.create_user(data=data)
             case ApiRoutes.ADD_BOOK:
                 return await self.add_book(data=data)
+            case ApiRoutes.TAKE_BOOK:
+                return await self.take_return_book(request=request, data=data, status='take')
+            case ApiRoutes.RETURN_BOOK:
+                return await self.take_return_book(request=request, data=data, status='return')
+            case ApiRoutes.STATISTICS_BOOK:
+                return await self.statistics_book(data=data)
             case _:
                 print(request, path, data)
                 raise NotFound

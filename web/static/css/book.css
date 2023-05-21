@@ -131,7 +131,7 @@ body {
     transition: .5s;
 }
 
-.main:hover .bool-info * {
+.main:hover .book-info * {
     text-shadow: 0 0 .5vw white;
     transition: .5s;
 }
@@ -147,30 +147,40 @@ body {
     border-radius: 1.5vw;
 }
 
-.bool-info {
+.book-info {
     width: 35vw;
     height: 30vw;
 }
 
-.bool-info h1 {
+.book-info h1 {
     margin-top: 2vw;
     font-size: 3vw;
     transition: .5s;
 }
 
-.bool-info h2 {
+.book-info h2 {
     margin-top: 1vw;
     font-size: 2vw;
     transition: .5s;
 }
 
-.bool-info h3 {
+.book-info h3 {
     margin-top: 1vw;
     font-size: 1.5vw;
     transition: .5s;
 }
 
-.bool-info:hover * {
+.book-info h4 {
+    margin-top: 4vw;
+    font-size: 1.2vw;
+    transition: .5s;
+}
+
+.book-info .statistics {
+    margin-top: 4vw;
+}
+
+.book-info:hover * {
     text-shadow: 0 0 .5vw white;
     transition: .5s;
 }
@@ -223,7 +233,7 @@ body {
     background-image: url('/svg/index/logout.svg');
 }
 
-#add-book::before {
+#add-book-link::before {
     background-image: url('/svg/index/add-book.svg');
 }
 

@@ -13,3 +13,6 @@ class DB:
 
     def __getattr__(self, collection: str) -> Collection:
         return self.db[collection]
+
+    def __getitem__(self, collection: str) -> Collection:
+        return self.db[collection]

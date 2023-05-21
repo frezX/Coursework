@@ -21,23 +21,23 @@ class UserInteraction:
         return not bool(self.users.find_one(filter={'login': login}))
 
     async def create_user(self, login: str, password_hash: HASH, role: str) -> tuple[int, str, float]:
-        count: int = self.users.count_documents({})
+        count: int = self.users.count_documents(filter={})
         user_id: int = count + 1
         timestamp: float = get_timestamp()
-        user_data: dict = {
+        document: dict = {
             '_id': user_id,
             'role': role,
             'login': login,
             'password_hash': password_hash.value,
             'timestamp': timestamp
         }
-        self.users.insert_one(document=user_data)
+        self.users.insert_one(document=document)
         session: str = await self.create_session(user_id=user_id)
-        session_data: dict = {
+        document: dict = {
             '_id': user_id,
             'session': session
         }
-        self.sessions.insert_one(document=session_data)
+        self.sessions.insert_one(document=document)
         return user_id, session, timestamp
 
     async def login(self, login: str, password_hash: HASH) -> tuple[int, str, str, float] | NoReturn:
@@ -58,8 +58,5 @@ class UserInteraction:
         }
         if not self.users.find_one(filter=user_filter):
             return False
-        session_filter: dict = {'_id': int(cookies['id'])}
-        session_in_db: Optional[dict] = self.sessions.find_one(filter=session_filter)
-        if not session_in_db or session_in_db.get('session') != cookies['session']:
-            return False
-        return True
+        session_in_db: Optional[dict] = self.sessions.find_one(filter={'_id': int(cookies['id'])})
+        return session_in_db and session_in_db.get('session') == cookies['session']

@@ -25,10 +25,20 @@
                     <div class="book-image">
                         <img class="image" src="data:image/png;base64,{{ book.image }}" alt="Image">
                     </div>
-                    <div class="bool-info">
+                    <div class="book-info">
                         <h1>{{ book.name }}</h1>
                         <h2>{{ book.author }}</h2>
                         <h3>{{ book.category }}</h3>
+                        <div class="statistics">
+                            <h2>Take count: {{ book_statistic.get('take', 0) }}</h2>
+                            <h2>Return count: {{ book_statistic.get('return', 0) }}</h2>
+                        </div>
+                        <h4>{{
+                                "You have already taken this book"
+                                if book_status == 'take' else
+                                "You haven't picked up this book yet"
+                            }}
+                        </h4>
                     </div>
                 </div>
             </div>
@@ -41,12 +51,18 @@
                     {% if role in consts['roles_allowed_add_books'] %}
                     <a href="/add_book" class="menu-link" id="add-book-link">Add book</a>
                     {% endif %}
-                    <a onclick="window.location.href='/api/take-book?id={{ book.book_id }}'" class="menu-link"
+                    {% if book_status == 'return' %}
+                    <a onclick="window.location.href='/api/take_book?id={{ book.book_id }}'" class="menu-link"
                        id="take-book">Take a book</a>
-                    <a onclick="window.location.href='/api/return-book?id={{ book.book_id }}'" class="menu-link"
+                    {% endif %}
+                    {% if book_status == 'take' %}
+                    <a onclick="window.location.href='/api/return_book?id={{ book.book_id }}'" class="menu-link"
                        id="return-book">Return book</a>
-                    <a onclick="window.location.href='/api/statistics-book?id={{ book.book_id }}'" class="menu-link"
+                    {% endif %}
+                    {% if book_statistic %}
+                    <a onclick="window.location.href='/api/statistics_book?id={{ book.book_id }}'" class="menu-link"
                        id="statistics-book">Statistics</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

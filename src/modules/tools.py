@@ -23,5 +23,7 @@ async def decode_form_data(request: Request) -> dict:
             else:
                 form_data[field.name] = await field.text()
         return form_data
+    if request.method == 'GET':
+        return dict(request.rel_url.query)
     else:
         return dict(await request.post())

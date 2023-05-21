@@ -1,6 +1,5 @@
 from typing import NoReturn
 from src.consts import templates
-from src.consts.book import Book
 from src.consts.web import WebConsts
 from src.consts.routes import WebRoutes
 from aiohttp.web import Response, Request, HTTPFound
@@ -29,7 +28,7 @@ class WebHandler:
                 'roles_allowed_add_books': 'librarian, admin, teacher'
             },
             'data': {
-                'catalog': [*await self.book_interaction.get_catalog() * 2]
+                'catalog': await self.book_interaction.get_catalog() * 2
             }
         }
         return templates['index'], params
@@ -77,14 +76,19 @@ class WebHandler:
                 raise NotFound
         except ValueError:
             raise BadRequest
+        user_id: int = int(cookies['id'])
+        book_status: str = await self.book_interaction.get_book_status(user_id=user_id, book_id=book_id)
+        book_statistic: dict = await self.book_interaction.get_book_statistic(book_id=book_id)
         params: dict = {
-            'user_id': cookies['id'],
+            'user_id': user_id,
             'role': cookies['role'],
             'login': cookies['login'],
             'session': cookies['session'],
             'registration_date': cookies['registration_date'],
             'book_id': book_id,
             'book': book,
+            'book_status': book_status,
+            'book_statistic': book_statistic,
             'consts': {
                 'roles_allowed_add_books': 'librarian, admin, teacher'
             },
