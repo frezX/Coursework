@@ -51,17 +51,16 @@
                     {% if role in consts['roles_allowed_add_books'] %}
                     <a href="/add_book" class="menu-link" id="add-book-link">Add book</a>
                     {% endif %}
-                    {% if book_status == 'return' %}
-                    <a onclick="window.location.href='/api/take_book?id={{ book.book_id }}'" class="menu-link"
+                    {% if book_status == 'take' %}
+                    <a href="/api/return_book?id={{ book.book_id }}" class="menu-link"
+                       id="return-book">Return book</a>
+                    {% else %}
+                    <a href="/api/take_book?id={{ book.book_id }}" class="menu-link"
                        id="take-book">Take a book</a>
                     {% endif %}
-                    {% if book_status == 'take' %}
-                    <a onclick="window.location.href='/api/return_book?id={{ book.book_id }}'" class="menu-link"
-                       id="return-book">Return book</a>
-                    {% endif %}
                     {% if book_statistic %}
-                    <a onclick="window.location.href='/api/statistics_book?id={{ book.book_id }}'" class="menu-link"
-                       id="statistics-book">Statistics</a>
+                    <a href="/api/statistics_book?id={{ book.book_id }}" class="menu-link"
+                       id="statistics-book" download>Statistics</a>
                     {% endif %}
                 </div>
             </div>

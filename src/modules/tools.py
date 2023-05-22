@@ -1,8 +1,7 @@
 from time import time
-from typing import Optional
 from datetime import datetime
 from aiohttp.web import Request
-from aiohttp.multipart import MultipartReader, BodyPartReader
+from aiohttp.multipart import MultipartReader
 
 
 def get_timestamp() -> float:

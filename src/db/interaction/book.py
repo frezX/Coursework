@@ -1,7 +1,8 @@
+from io import StringIO
 from bson import Binary
+from csv import DictWriter
 from src.db import DB, database
 from src.consts.book import Book
-from pymongo.cursor import Cursor
 from typing import Optional, NoReturn
 from pymongo.collection import Collection
 from src.modules.tools import get_timestamp, strftime
@@ -75,3 +76,21 @@ class BookInteraction:
             status_name: str = book_statistic['status']
             statistic[status_name]: int = statistic.get(status_name, 0) + 1
         return statistic
+
+    async def get_book_statistic_csv(self, book_id: int) -> StringIO:
+        book_statistics_collection: Collection = self.database[f'book-statistics-{book_id}']
+        book_statistics = book_statistics_collection.find({})
+        csv_headers: list[str] = ['USER ID', 'STATUS', 'DATE']
+        csvfile: StringIO = StringIO()
+        writer: DictWriter = DictWriter(f=csvfile, fieldnames=csv_headers)
+        writer.writeheader()
+        for item in book_statistics:
+            writer.writerow(
+                rowdict={
+                    'USER ID': item['user_id'],
+                    'STATUS': item['status'],
+                    'DATE': strftime(timestamp=item['timestamp']),
+                }
+            )
+        csvfile.seek(0)
+        return csvfile

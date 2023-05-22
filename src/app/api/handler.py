@@ -1,3 +1,4 @@
+from io import StringIO
 from bson import Binary
 from typing import NoReturn
 from src.logger import Logger
@@ -84,9 +85,17 @@ class ApiHandler:
         await self.book_interaction.take_return_book(user_id=user_id, book_id=book_id, status=status)
         return HTTPFound(location=f'/book?id={book_id}')
 
-    @staticmethod
-    async def statistics_book(data: dict) -> Response | NoReturn:
-        return Response(text=str(data))
+    async def statistics_book(self, data: dict) -> Response | NoReturn:
+        if not (book_id := int(data.get('id', 0))) or not \
+                await self.book_interaction.get_book_statistic(book_id=book_id):
+            raise DataError('Wrong API params')
+        csvfile: StringIO = await self.book_interaction.get_book_statistic_csv(book_id=book_id)
+        response: Response = Response(
+            body=csvfile.read(),
+            content_type='text/csv',
+            headers={'Content-Disposition': f'attachment; filename="book_statistic_{book_id}.csv"'}
+        )
+        return response
 
     async def handler(self, request: Request, path: str, data: dict) -> Response | NoReturn:
         match path:
