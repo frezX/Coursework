@@ -2,6 +2,5 @@ venv/
 .idea/
 *__pycache__*
 *.pyc
-env
 log
 test.py

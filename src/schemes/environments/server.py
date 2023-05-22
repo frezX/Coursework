@@ -12,5 +12,3 @@ class EnvTypesApp(EnvTypes):
     port: int
     domen: str
     url: str
-    websockets_url: str
-    token_bytes: int
