@@ -33,7 +33,8 @@
                             <h2>Take count: {{ book_statistic.get('take', 0) }}</h2>
                             <h2>Return count: {{ book_statistic.get('return', 0) }}</h2>
                         </div>
-                        <h4>{{
+                        <h4>
+                            {{
                                 "You have already taken this book"
                                 if book_status == 'take' else
                                 "You haven't picked up this book yet"
