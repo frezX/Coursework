@@ -25,7 +25,7 @@ class WebHandler:
             'session': cookies['session'],
             'registration_date': cookies['registration_date'],
             'consts': {
-                'roles_allowed_add_books': 'librarian, admin, teacher'
+                'roles_allowed_add_books': WebConsts.ROLES_ALLOWED_ADD_BOOKS
             },
             'data': {
                 'catalog': await self.book_interaction.get_catalog() * 2
@@ -90,7 +90,7 @@ class WebHandler:
             'book_status': book_status,
             'book_statistic': book_statistic,
             'consts': {
-                'roles_allowed_add_books': 'librarian, admin, teacher'
+                'roles_allowed_add_books': WebConsts.ROLES_ALLOWED_ADD_BOOKS
             },
         }
         return templates[WebRoutes.BOOK], params
@@ -111,7 +111,6 @@ class WebHandler:
                 raise NotFound
 
     async def __call__(self, request: Request, path: str, data: dict) -> Response:
-        # print(request.headers)
         try:
             template, params = await self.handler(request=request, path=path, data=data)
             return await render_template(request=request, template=template, params=params)
